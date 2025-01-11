@@ -8,25 +8,60 @@ public class SimpleMenu implements Menu {
 
     @Override
     public boolean add(String parentName, String childName, ActionDelegate actionDelegate) {
-   /*  добавьте реализацию*/
-        return  false;
+
+        MenuItem currentItem = new SimpleMenuItem(childName, actionDelegate);
+        Optional<ItemInfo> item = findItem(parentName);
+        if (item.isPresent()) {
+            List<MenuItem> child = item.get().menuItem.getChildren();
+            child.add(currentItem);
+        } else if (parentName == null){
+            rootElements.add(currentItem);
+        }
+        return  item.isPresent() || parentName == null;
     }
 
     @Override
     public Optional<MenuItemInfo> select(String itemName) {
-        /*  добавьте реализацию*/
-        return null;
+
+        Optional<ItemInfo> item = findItem(itemName);
+        Optional<MenuItemInfo> result = Optional.empty();
+        if (item.isPresent()) {
+            ItemInfo info = item.get();
+            result = Optional.of(new MenuItemInfo(info.menuItem, info.number));
+        }
+        return result;
     }
 
     @Override
     public Iterator<MenuItemInfo> iterator() {
-        /*  добавьте реализацию*/
-        return null;
+
+        return new Iterator<>() {
+            private final DFSIterator iterator = new DFSIterator();
+
+            @Override
+            public boolean hasNext() {
+                return iterator.hasNext();
+            }
+
+            @Override
+            public MenuItemInfo next() {
+                ItemInfo item = iterator.next();
+                return new MenuItemInfo(item.menuItem, item.number);
+            }
+        };
     }
 
     private Optional<ItemInfo> findItem(String name) {
-        /*  добавьте реализацию*/
-        return null;
+
+        Iterator<ItemInfo> iterator = new DFSIterator();
+        Optional<ItemInfo> result = Optional.empty();
+        while (iterator.hasNext()) {
+            ItemInfo current = iterator.next();
+            if (current.menuItem.getName().equals(name)) {
+                result = Optional.of(current);
+            }
+        }
+        return result;
     }
 
     private static class SimpleMenuItem implements MenuItem {
