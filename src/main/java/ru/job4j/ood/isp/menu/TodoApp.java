@@ -1,6 +1,5 @@
 package ru.job4j.ood.isp.menu;
 
-
 public class TodoApp {
     private static final ActionDelegate DEFAULT_ACTION = () -> System.out.println("Some action");
     private final Menu menu;

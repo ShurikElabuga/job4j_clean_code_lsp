@@ -14,7 +14,7 @@ public class SimpleMenu implements Menu {
         if (item.isPresent()) {
             List<MenuItem> child = item.get().menuItem.getChildren();
             child.add(currentItem);
-        } else if (parentName == null){
+        } else if (parentName == null) {
             rootElements.add(currentItem);
         }
         return  item.isPresent() || parentName == null;
@@ -93,9 +93,9 @@ public class SimpleMenu implements Menu {
 
     private class DFSIterator implements Iterator<ItemInfo> {
 
-        Deque<MenuItem> stack = new LinkedList<>();
+       private Deque<MenuItem> stack = new LinkedList<>();
 
-        Deque<String> numbers = new LinkedList<>();
+       private Deque<String> numbers = new LinkedList<>();
 
         DFSIterator() {
             int number = 1;
@@ -103,6 +103,14 @@ public class SimpleMenu implements Menu {
                 stack.addLast(item);
                 numbers.addLast(String.valueOf(number++).concat("."));
             }
+        }
+
+        public Deque<MenuItem> getStack() {
+            return stack;
+        }
+
+        public Deque<String> getNumbers() {
+            return numbers;
         }
 
         @Override
@@ -129,12 +137,20 @@ public class SimpleMenu implements Menu {
 
     private class ItemInfo {
 
-        MenuItem menuItem;
-        String number;
+       private MenuItem menuItem;
+        private String number;
 
         public ItemInfo(MenuItem menuItem, String number) {
             this.menuItem = menuItem;
             this.number = number;
+        }
+
+        public MenuItem getMenuItem() {
+            return menuItem;
+        }
+
+        public String getNumber() {
+            return number;
         }
     }
 }
